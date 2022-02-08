@@ -51,3 +51,22 @@ drwxr-xr-x   5 yutarom  staff        160 12 16  2020 vagrant/
 - `ls --help` : lsコマンドのヘルプが出力される
 - manに比べてシンプルな説明が出てくる
 - `help ls` : こっちでも出るかも
+
+## mkdir
+
+- make directoryの略称
+- ディレクトリを新規作成
+- `mkdir test` : testという名称のディレクトリを作成する
+
+## mv
+
+- moveの略称
+- ディレクトリやファイルの場所を移動する、名前の変更をする
+- `mv test test2` : test→test2へ変更する
+
+## rmdir
+
+- remove directoryの略称
+- 指定したディレクトリを削除する
+
+## 絶対パス・相対パス
