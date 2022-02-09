@@ -80,4 +80,10 @@ drwxr-xr-x   5 yutarom  staff        160 12 16  2020 vagrant/
   - カレントディレクトリを起点にしどのように辿っていけば特定のファイル・ディレクトリにたどり着くかを表現する方法
   - `./taro/test` `./` カレントディレクトリ
   - カレントディレクトリから近い
-## rmdir
+
+## cat
+
+- concatenateの略称
+- ファイルの中身を表示させる
+- concatenateの略称
+- `cat /bin/pwd`とか
