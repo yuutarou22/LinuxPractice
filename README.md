@@ -18,7 +18,7 @@
 - `ls /usr -l` : -lオプションで詳細な情報を確認できる
 - `ls -l -R ./Downloads` : -Rオプションで、配下の全ての情報を確認できる
 
-```
+```sh
 # 例
 19:04:40 :yutarom ~ $ ls -l
 drwxr-xr-x+  5 yutarom  staff        160 10 12  2019 Public/
@@ -185,3 +185,49 @@ uid=1000(yutarom) gid=20(staff)
 # 以下略
 uid=1000(yutarom) gid=20(staff) 
 ```
+
+## chmod
+
+- change modeの略称
+- ファイルやディレクトリに対する操作を可能・拒否（アクセス権限）を変更する
+  - r : readable（読み取り）
+  - w : writable（書き込み）
+  - x : executable（実行可能）
+- 権限の見方
+  - １桁目　: ディレクトリかどうか
+  - 2~４桁目 : 所有者（ユーザ）
+  - 5~7桁目 : グループ
+  - 8~10桁目 : その他のユーザ（Other）
+
+```sh
+# chmod -r output で、読み取り権限を剥奪できる
+09:29:25 :yutarom LinuxPractice $ ls -l output
+-rw-r--r--  1 yutarom  staff  7  2 11 09:29 output
+09:29:30 :yutarom LinuxPractice $ chmod -r output
+09:32:45 :yutarom LinuxPractice $ ls -l output
+--w-------  1 yutarom  staff  7  2 11 09:29 output
+cat: output: Permission denied
+
+# chmod +r output で、読み取り権限を付与できる
+09:34:26 :yutarom LinuxPractice $ chmod +r output
+09:35:09 :yutarom LinuxPractice $ ls -l output
+-rw-r--r--  1 yutarom  staff  7  2 11 09:29 output
+09:35:13 :yutarom LinuxPractice $ cat output
+Hello!
+
+# 所有者以外の読み取り・書き込み権限を剥奪する方法
+09:35:20 :yutarom LinuxPractice $ chmod u+rw output
+09:42:25 :yutarom LinuxPractice $ ls -l output
+-rw-r--r--  1 yutarom  staff  7  2 11 09:29 output
+09:42:31 :yutarom LinuxPractice $ chmod g-rw output
+09:42:46 :yutarom LinuxPractice $ ls -l output
+-rw----r--  1 yutarom  staff  7  2 11 09:29 output
+09:42:50 :yutarom LinuxPractice $ chmod o-rw output
+09:43:01 :yutarom LinuxPractice $ ls -l output
+-rw-------  1 yutarom  staff  7  2 11 09:29 output
+```
+
+### 権限に関する疑問
+
+- 自分一人しか使わないコンピュータ、権限の管理なんて必要なの？
+  - 変更してはならない重要なファイルがあった場合に、wの権限を
