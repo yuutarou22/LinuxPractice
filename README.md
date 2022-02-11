@@ -20,7 +20,7 @@
 
 ```sh
 # 例
-19:04:40 :yutarom ~ $ ls -l
+$ ls -l
 drwxr-xr-x+  5 yutarom  staff        160 10 12  2019 Public/
 drwxr-xr-x   5 yutarom  staff        160  2 28  2020 app/
 -rw-r--r--@  1 yutarom  staff  657457152 10  6  2019 archlinux-2019.10.01-x86_64.iso
@@ -101,6 +101,10 @@ drwxr-xr-x   5 yutarom  staff        160 12 16  2020 vagrant/
 - ファイルをコピーする
 - `cp コピー元（ファイル名） コピー先（ファイル名）`
 
+## grep
+
+- テキストデータから、特定の文字列パターンを持つ行だけを抜き出して表示するコマンド
+
 ## echo
 
 - echo（やまびこ）
@@ -180,7 +184,7 @@ drwxr-xr-x   5 yutarom  staff        160 12 16  2020 vagrant/
 ```
 # このとき、ユーザIDは「1000」、ユーザ名は「yutarom」となる。
 # 所属グループも見れるよ。
-09:09:19 :yutarom ~ $ id
+$ id
 uid=1000(yutarom) gid=20(staff)
 # 以下略
 uid=1000(yutarom) gid=20(staff) 
@@ -208,29 +212,31 @@ uid=1000(yutarom) gid=20(staff)
 
 ```sh
 # chmod -r output で、読み取り権限を剥奪できる
-09:29:25 :yutarom LinuxPractice $ ls -l output
+$ ls -l output
 -rw-r--r--  1 yutarom  staff  7  2 11 09:29 output
-09:29:30 :yutarom LinuxPractice $ chmod -r output
-09:32:45 :yutarom LinuxPractice $ ls -l output
+$ chmod -r output
+$ ls -l output
 --w-------  1 yutarom  staff  7  2 11 09:29 output
 cat: output: Permission denied
 
 # chmod +r output で、読み取り権限を付与できる
-09:34:26 :yutarom LinuxPractice $ chmod +r output
-09:35:09 :yutarom LinuxPractice $ ls -l output
+$ chmod +r output
+$ ls -l output
 -rw-r--r--  1 yutarom  staff  7  2 11 09:29 output
-09:35:13 :yutarom LinuxPractice $ cat output
+$ cat output
 Hello!
 
 # 所有者以外の読み取り・書き込み権限を剥奪する方法
-09:35:20 :yutarom LinuxPractice $ chmod u+rw output
-09:42:25 :yutarom LinuxPractice $ ls -l output
+$ chmod u+rw output
+$ ls -l output
 -rw-r--r--  1 yutarom  staff  7  2 11 09:29 output
-09:42:31 :yutarom LinuxPractice $ chmod g-rw output
-09:42:46 :yutarom LinuxPractice $ ls -l output
+
+$ chmod g-rw output
+$ ls -l output
 -rw----r--  1 yutarom  staff  7  2 11 09:29 output
-09:42:50 :yutarom LinuxPractice $ chmod o-rw output
-09:43:01 :yutarom LinuxPractice $ ls -l output
+
+$ chmod o-rw output
+$ ls -l output
 -rw-------  1 yutarom  staff  7  2 11 09:29 output
 ```
 
@@ -245,4 +251,122 @@ Hello!
   - 例えば大量のファイルが入ったディレクトリを、USBなどにコピーしたいとします。特定のファイルが大容量なので必要ない場合に、rの権限を剥奪します。
   - 読み取れないということはコピーもできないということになりますので、必要のないファイルを除外してコピーしたい際に活用します。
 
-### 
+## ワンライナー
+
+- シェル上で１行のコマンドとして走る小さなプログラムのこと。
+- いくつかのコマンドをパイプなどで繋いで作る
+- 「山椒は小粒でもぴりりと辛い」というように、小さくても奥深いものがあり、工夫次第でかなり複雑・高度なことができる
+
+### シェル変数
+
+```sh
+# 変数の格納
+$ x=3
+$ echo $x
+3
+
+# こんな使い方も
+$ d=`date`
+$ echo $d
+2022年 2月11日 金曜日 16時45分06秒 JST
+```
+
+### forループ
+
+```sh
+$ for a in cat dog pig; do echo $a; done
+cat
+dog
+pig
+```
+
+「do」と「done」はペアで使う
+
+```sh
+# do~doneの間が繰り返されるコマンド
+for 変数名 in 値を列挙; do 繰り返すコマンド; done
+```
+
+#### forで役立つ　seq
+
+rangeのようなもの。
+
+```sh
+$ seq 0 5
+0
+1
+2
+3
+4
+5
+
+# ``で囲んだコマンドは、実行結果が文字列に置き換えられ、for文の一部になる
+# for a in 1 2 3 4 5 6 7 8 9 10; do echo $a; done と同等である
+for a in `seq 1 10`; do echo $a; done
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+```
+
+## カレンダー問題を解く
+
+- 2015年の不吉な日（13日の金曜日）を取得する
+- [dateコマンドをMacで使う場合の注意点](https://nonoichi123.hatenablog.com/entry/mac%25e3%2581%25a7date%25e3%2582%25b3%25e3%2583%259e%25e3%2583%25b3%25e3%2583%2589%25e3%2582%2592%25e4%25bd%25bf%25e3%2581%2584%25e3%2581%2593%25e3%2581%25aa%25e3%2581%2599/)
+
+```sh
+# Macで実施
+$ date -v+1d
+2022年 2月12日 土曜日 17時04分07秒 JST
+
+$ date -j -f "%Y %m/%d" "2015 11/13"
+2015年 11月13日 金曜日 17時05分03秒 JST
+
+$ for m in `seq 1 12`; do date -j -f "%Y %m/%d" "2015 $m/13"; done
+2015年 1月13日 火曜日 17時06分27秒 JST
+2015年 2月13日 金曜日 17時06分27秒 JST
+2015年 3月13日 金曜日 17時06分27秒 JST
+2015年 4月13日 月曜日 17時06分27秒 JST
+2015年 5月13日 水曜日 17時06分27秒 JST
+2015年 6月13日 土曜日 17時06分27秒 JST
+2015年 7月13日 月曜日 17時06分27秒 JST
+2015年 8月13日 木曜日 17時06分27秒 JST
+2015年 9月13日 日曜日 17時06分27秒 JST
+2015年 10月13日 火曜日 17時06分27秒 JST
+2015年 11月13日 金曜日 17時06分27秒 JST
+2015年 12月13日 日曜日 17時06分27秒 JST
+
+# この間に`LANG=C`を実行して使用言語を英語に変更した
+
+$ for m in `seq 1 12`; do date -j -f "%Y %m/%d" "2015 $m/13"; done | grep Fri
+Fri Feb 13 17:14:05 JST 2015
+Fri Mar 13 17:14:05 JST 2015
+Fri Nov 13 17:14:05 JST 2015
+
+# 年3回ということがわかった。じゃあ2015~2024年の間では何回？
+$ for y in `seq 2015 2024`; do for m in `seq 1 12`; do date -j -f "%Y %m/%d" "$y $m/13"; done | grep Fri; done
+Fri Feb 13 17:17:36 JST 2015
+Fri Mar 13 17:17:36 JST 2015
+Fri Nov 13 17:17:36 JST 2015
+Fri May 13 17:17:36 JST 2016
+Fri Jan 13 17:17:36 JST 2017
+Fri Oct 13 17:17:37 JST 2017
+Fri Apr 13 17:17:37 JST 2018
+Fri Jul 13 17:17:37 JST 2018
+Fri Sep 13 17:17:37 JST 2019
+Fri Dec 13 17:17:37 JST 2019
+Fri Mar 13 17:17:37 JST 2020
+Fri Nov 13 17:17:37 JST 2020
+Fri Aug 13 17:17:37 JST 2021
+Fri May 13 17:17:37 JST 2022
+Fri Jan 13 17:17:37 JST 2023
+Fri Oct 13 17:17:37 JST 2023
+Fri Sep 13 17:17:37 JST 2024
+Fri Dec 13 17:17:37 JST 2024
+```
