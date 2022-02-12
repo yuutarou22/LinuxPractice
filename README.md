@@ -342,7 +342,7 @@ $ for m in `seq 1 12`; do date -j -f "%Y %m/%d" "2015 $m/13"; done
 2015年 11月13日 金曜日 17時06分27秒 JST
 2015年 12月13日 日曜日 17時06分27秒 JST
 
-# この間に`LANG=C`を実行して使用言語を英語に変更した
+# この間に`LANG=C`を実行して使用言語を英語に変更した（これしないと、以降の結果が出ない）
 
 $ for m in `seq 1 12`; do date -j -f "%Y %m/%d" "2015 $m/13"; done | grep Fri
 Fri Feb 13 17:14:05 JST 2015
@@ -369,4 +369,38 @@ Fri Jan 13 17:17:37 JST 2023
 Fri Oct 13 17:17:37 JST 2023
 Fri Sep 13 17:17:37 JST 2024
 Fri Dec 13 17:17:37 JST 2024
+
+# １つずつ数えていく必要があるので、形式をスッキリさせる
+$ for y in `seq 2015 2024`; do for m in `seq 1 12`; do date -j -f "%Y %m/%d" "$y $m/13" +"%Y %a"; done | grep Fri; done
+2015 Fri
+2015 Fri
+2015 Fri
+2016 Fri
+2017 Fri
+2017 Fri
+2018 Fri
+2018 Fri
+2019 Fri
+2019 Fri
+2020 Fri
+2020 Fri
+2021 Fri
+2022 Fri
+2023 Fri
+2023 Fri
+2024 Fri
+2024 Fri
+
+# uniq: 前後で同じ行が重複したら１つにまとめる
+$ for y in `seq 2015 2024`; do for m in `seq 1 12`; do date -j -f "%Y %m/%d" "$y $m/13" +"%Y %a"; done | grep Fri; done | uniq -c
+   3 2015 Fri
+   1 2016 Fri
+   2 2017 Fri
+   2 2018 Fri
+   2 2019 Fri
+   2 2020 Fri
+   1 2021 Fri
+   1 2022 Fri
+   2 2023 Fri
+   2 2024 Fri
 ```
