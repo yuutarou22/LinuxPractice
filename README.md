@@ -1,5 +1,9 @@
 # LinuxPractice
 
+## 参考書籍
+
+[入門者のLinux 素朴な疑問を解消しながら学ぶ (ブルーバックス)   奈佐原 顕郎 ](https://www.amazon.co.jp/dp/4062579898/ref=cm_sw_r_tw_dp_ZKRWF0PR2RQ1HZ513YA1)
+
 ## キーワード
 
 ### カーネル
